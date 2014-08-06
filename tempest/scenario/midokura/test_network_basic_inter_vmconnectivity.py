@@ -114,7 +114,6 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
 
     @services('compute', 'network')
     def test_network_basic_inter_vmssh(self):
-        LOG.info()
         ap_details = self.access_point.keys()[0]
         networks = ap_details.networks
         ip_pk = []
@@ -130,4 +129,5 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                 raise Exception("FAIL - No ip for this network : %s"
                             % server.networks)
         for pair in itertools.permutations(ip_pk):
+            LOG.info("Checking ssh between %s %s" % (pair[0][0], pair[1][0]))
             self._ssh_through_gateway(pair[0],pair[1])
