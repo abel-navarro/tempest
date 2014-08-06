@@ -85,6 +85,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
     def _ssh_through_gateway(self, origin, destination):
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
+            LOG.info("ssh_client already set up")
             result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
             pprint(result)
         except Exception as inst:
