@@ -73,7 +73,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
 
 
     def _ping_through_gateway(self, origin, destination):
-        LOG.info("Trying to ping the between %s and %s" % (origin[0], destination[0]))
+        LOG.info("Trying to ping between %s and %s" % (origin[0], destination[0]))
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
             self.assertTrue(self._check_remote_connectivity(ssh_client, destination[0]))
@@ -85,7 +85,8 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
     def _ssh_through_gateway(self, origin, destination):
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
-            result = ssh_client.exec_command("ssh -A cirros@%s" % destination[0])
+            time.sleep(3000)
+            result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
             pprint(result)
         except Exception as inst:
             LOG.info(inst.args)
@@ -129,5 +130,4 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                             % server.networks)
         for pair in itertools.permutations(ip_pk):
             LOG.info("Checking ssh between %s %s" % (pair[0][0], pair[1][0]))
-            time.sleep(3000)
             self._ssh_through_gateway(pair[0],pair[1])
