@@ -86,7 +86,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
         LOG.info("Trying to ping the list of ips")
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
-            result = ssh_client.exec_command("ssh %s" % destination[0])
+            result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
             pprint(result)
         except Exception as inst:
             LOG.info(inst.args)
@@ -114,6 +114,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
 
     @services('compute', 'network')
     def test_network_basic_inter_vmssh(self):
+        LOG.info()
         ap_details = self.access_point.keys()[0]
         networks = ap_details.networks
         ip_pk = []
