@@ -82,6 +82,17 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
             LOG.info
             raise
 
+    def _ssh_through_gateway(self, origin, destination):
+        LOG.info("Trying to ping the list of ips")
+        try:
+            ssh_client = self.setup_tunnel(origin[0], origin[1])
+            result = ssh_client.exec_command("ssh %s" % destination[0])
+            pprint(result)
+        except Exception as inst:
+            LOG.info(inst.args)
+            LOG.info
+            raise
+
     @services('compute', 'network')
     def test_network_basic_inter_vmconnectivity(self):
         ap_details = self.access_point.keys()[0]
@@ -100,3 +111,22 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                             % server.networks)
         for pair in itertools.permutations(ip_pk):
             self._ping_through_gateway(pair[0],pair[1])
+
+    @services('compute', 'network')
+    def test_network_basic_inter_vmssh(self):
+        ap_details = self.access_point.keys()[0]
+        networks = ap_details.networks
+        ip_pk = []
+        for server in self.servers:
+            #servers should only have 1 network
+            name = server.networks.keys()[0]
+            if any(i in networks.keys() for i in server.networks.keys()):
+                remote_ip = server.networks[name][0]
+                pk = self.servers[server].private_key
+                ip_pk.append((remote_ip, pk))
+            else:
+                LOG.info("FAIL - No ip connectivity to the server ip: %s" % server.networks[name][0])
+                raise Exception("FAIL - No ip for this network : %s"
+                            % server.networks)
+        for pair in itertools.permutations(ip_pk):
+            self._ssh_through_gateway(pair[0],pair[1])
