@@ -111,7 +111,6 @@ class TestScenario(manager.NetworkScenarioTest):
         """
         returns the ip (floating/internal) of a server
         """
-        pprint(server)
         if floating:
             server_ip = self.floating_ips[server].floating_ip_address
         else:
@@ -217,7 +216,6 @@ class TestScenario(manager.NetworkScenarioTest):
         return dict(server=server, keypair=keypair)
 
     def _create_servers(self):
-        pprint(self.networks)
         for i, network in enumerate(self.networks):
             name = rand_name('server-smoke-%d-' % i)
             server = self._create_server(name, network)
@@ -231,7 +229,7 @@ class TestScenario(manager.NetworkScenarioTest):
             self.floating_ip_tuple = Floating_IP_tuple(floating_ip, server)
 
     def _assign_custom_floating_ips(self, server):
-        pprint("assign floating ip")
+        LOG.info("assign floating ip")
         public_network_id = CONF.network.public_network_id
         floating_ip = self._create_floating_ip(server, public_network_id)
         self.floating_ip_tuple = Floating_IP_tuple(floating_ip, server)

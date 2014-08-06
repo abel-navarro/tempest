@@ -73,7 +73,6 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
 
 
     def _ping_through_gateway(self, origin, destination):
-        LOG.info("Trying to ping the list of ips")
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
             self.assertTrue(self._check_remote_connectivity(ssh_client, destination[0]))
@@ -83,10 +82,10 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
             raise
 
     def _ssh_through_gateway(self, origin, destination):
-        LOG.info("Trying to ping the list of ips")
+        LOG.info("Trying to ping the between %s and %s" % (origin[0], destination[1]))
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
-            result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
+            result = ssh_client.exec_command("ssh -A cirros@%s" % destination[0])
             pprint(result)
         except Exception as inst:
             LOG.info(inst.args)
