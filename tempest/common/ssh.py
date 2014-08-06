@@ -95,7 +95,7 @@ class Client(object):
                                 key_filename=self.gw_key_filename,
                                 timeout=self.channel_timeout, pkey=self.gw_pkey)
 
-                    LOG.info("ssh connection to %s@%s successfuly created",
+                    LOG.info("First ssh connection to gateway %s@%s successfully created",
                          self.gw_username, self.gateway)
 
                     transport = self.ssh_gw.get_transport()
@@ -110,6 +110,9 @@ class Client(object):
                                 key_filename=self.key_filename,
                                 timeout=self.channel_timeout,
                                 pkey=self.pkey, sock=channel)
+
+                    LOG.info("Tunnel connection %s@%s successfully created through localhost port:4000",
+                             self.username, self.host)
                 else:
 
                     ssh.connect(self.host, username=self.username,
@@ -118,7 +121,7 @@ class Client(object):
                             key_filename=self.key_filename,
                             timeout=self.channel_timeout, pkey=self.pkey)
 
-                LOG.info("ssh connection to %s@%s successfuly created",
+                LOG.info("ssh connection to %s@%s successfully created",
                          self.username, self.host)
 
                 return ssh
