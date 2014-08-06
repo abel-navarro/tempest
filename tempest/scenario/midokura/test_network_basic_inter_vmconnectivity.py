@@ -86,9 +86,12 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
             LOG.info("ssh_client already set up")
-            result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
-            #result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
-            pprint(result)
+            #result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
+            try:
+                result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
+                pprint(result)
+            except Exception:
+                raise
         except Exception as inst:
             LOG.info(inst.args)
             LOG.info
