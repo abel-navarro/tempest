@@ -93,6 +93,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
             LOG.info
             raise
 
+    """
     @services('compute', 'network')
     def test_network_basic_inter_vmconnectivity(self):
         ap_details = self.access_point.keys()[0]
@@ -111,6 +112,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                             % server.networks)
         for pair in itertools.permutations(ip_pk):
             self._ping_through_gateway(pair[0],pair[1])
+    """
 
     @services('compute', 'network')
     def test_network_basic_inter_vmssh(self):
