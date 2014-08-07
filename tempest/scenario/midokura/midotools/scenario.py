@@ -61,6 +61,7 @@ class TestScenario(manager.NetworkScenarioTest):
         self.subnets = []
         self.routers = []
         self.floating_ips = {}
+        self.masterkey = None
 
     def custom_scenario(self, scenario):
         tenant_id = None
@@ -70,10 +71,9 @@ class TestScenario(manager.NetworkScenarioTest):
                 self.tenants[tenant_id] = self.admin.get_tenant(tenant_id)
             else:
                 tenant_id = self._create_tenant()
-            """
-            self._create_custom_keypairs(tenant_id)
-            self._create_custom_security_groups(tenant_id)
-            """
+            if tenant['MasterKey']:
+                self._create_custom_keypairs(tenant_id)
+
             for network in tenant['networks']:
                 network['tenant_id'] = tenant_id
                 cnetwork, subnets, router = \
@@ -86,7 +86,7 @@ class TestScenario(manager.NetworkScenarioTest):
                 self.servers = {}
                 for server in network['servers']:
                     name = rand_name('server-smoke-')
-                    serv_dict = self._create_server(name, cnetwork)
+                    serv_dict = self._create_server(name, cnetwork,)
                     self.servers[serv_dict['server']] = serv_dict['keypair']
                     if server['floating_ip']:
                         self._assign_custom_floating_ips(serv_dict['server'])
@@ -132,8 +132,8 @@ class TestScenario(manager.NetworkScenarioTest):
         return tenant_id
 
     def _create_custom_keypairs(self, tenant_id):
-        self.keypairs[tenant_id] = self.create_keypair(
-            name=rand_name('keypair-smoke-'))
+        self.masterkey = self.create_keypair(
+            name="masterkey")
 
     def _create_custom_networks(self, mynetwork):
         network = self._create_network(mynetwork['tenant_id'])
@@ -200,7 +200,11 @@ class TestScenario(manager.NetworkScenarioTest):
         return subnet
 
     def _create_server(self, name, network, security_groups=None, isgateway=None):
-        keypair = self.create_keypair(name='keypair-%s' % name)
+        if not self.masterkey:
+            keypair = self.create_keypair(name='keypair-%s' % name)
+        else:
+            keypair = self.masterkey
+
         if security_groups is None:
             security_groups = [self.security_group.name]
         nics = [{'net-id': network.id}, ]

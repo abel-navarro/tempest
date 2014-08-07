@@ -65,12 +65,12 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
             'networks': [networkA],
             'tenant_id': None,
             'type': 'default',
-            'hasgateway': True
+            'hasgateway': True,
+            'MasterKey': True,
         }
         self.scenario = {
             'tenants': [tenantA],
         }
-
 
     def _ping_through_gateway(self, origin, destination):
         LOG.info("Trying to ping between %s and %s" % (origin[0], destination[0]))
@@ -85,10 +85,9 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
     def _ssh_through_gateway(self, origin, destination):
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
-            LOG.info("ssh_client already set up")
             #result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
             try:
-                result = ssh_client.exec_command("ssh -v cirros@%s" % destination[0])
+                result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
                 pprint(result)
             except Exception:
                 raise
