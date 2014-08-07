@@ -110,6 +110,7 @@ class Client(object):
                                 key_filename=self.key_filename,
                                 timeout=self.channel_timeout,
                                 pkey=self.pkey, sock=channel)
+                    ssh.agent
 
                     LOG.info("Tunnel connection %s@%s successfully created through localhost port:4000",
                              self.username, self.host)
@@ -167,6 +168,7 @@ class Client(object):
         poll = select.poll()
         poll.register(channel, select.POLLIN)
         start_time = time.time()
+        agent_handler = paramiko.agent.AgentRequestHandler(channel)
 
         while True:
             ready = poll.poll(self.channel_timeout)
