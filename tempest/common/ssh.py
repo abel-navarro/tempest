@@ -167,7 +167,7 @@ class Client(object):
         poll = select.poll()
         poll.register(channel, select.POLLIN)
         start_time = time.time()
-
+        LOG.info("executting cmd: %s" % cmd)
         while True:
             ready = poll.poll(self.channel_timeout)
             if not any(ready):
@@ -187,8 +187,8 @@ class Client(object):
                 err_data += err_chunk,
             if channel.closed and not err_chunk and not out_chunk:
                 break
-            pprint("error %s" % err_data)
-            pprint("out %s" % out_data)
+            LOG.info("error %s" % err_data)
+            LOG.info("out %s" % out_data)
         exit_status = channel.recv_exit_status()
         if 0 != exit_status:
             raise exceptions.SSHExecCommandFailed(

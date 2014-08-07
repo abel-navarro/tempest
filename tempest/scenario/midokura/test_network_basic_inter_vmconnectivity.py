@@ -91,8 +91,9 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                 result = ssh_client.exec_command("/usr/bin/ssh -y cirros@%s" % destination[0])
                 pprint(result)
             except Exception:
-                result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
-                LOG.info(result)
+                LOG.info(Exception)
+                #result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
+                #LOG.info(result)
                 raise
         except Exception as inst:
             LOG.info(inst.args)
