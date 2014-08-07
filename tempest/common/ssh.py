@@ -23,7 +23,7 @@ import warnings
 
 from tempest import exceptions
 from tempest.openstack.common import log as logging
-
+from pprint import pprint
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -189,6 +189,7 @@ class Client(object):
             if channel.closed and not err_chunk and not out_chunk:
                 break
         exit_status = channel.recv_exit_status()
+        pprint(exit_status)
         if 0 != exit_status:
             raise exceptions.SSHExecCommandFailed(
                 command=cmd, exit_status=exit_status,
