@@ -25,6 +25,11 @@ from tempest import exceptions
 from tempest.openstack.common import log as logging
 from pprint import pprint
 
+try:
+    import SocketServer
+except ImportError:
+    import socketserver as SocketServer
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import paramiko
@@ -33,7 +38,7 @@ with warnings.catch_warnings():
 LOG = logging.getLogger(__name__)
 
 
-class Client(object):
+class Client(SocketServer.BaseRequestHandler):
 
     def __init__(self, host, username, password=None, timeout=300, pkey=None,
                  channel_timeout=10, look_for_keys=False, key_filename=None,
