@@ -24,6 +24,7 @@ from tempest import config
 from tempest.openstack.common import log as logging
 from tempest.scenario.midokura.midotools import scenario
 import itertools
+from tempest.common import debug
 import time
 from pprint import pprint
 
@@ -91,10 +92,9 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                 result = ssh_client.exec_command("/usr/bin/ssh cirros@%s" % destination[0])
                 pprint(result)
             except Exception:
-                LOG.info(Exception.message)
-                LOG.info(Exception.args)
                 #result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
                 #LOG.info(result)
+                debug.log_net_debug()
                 raise
         except Exception as inst:
             LOG.info(inst.args)
