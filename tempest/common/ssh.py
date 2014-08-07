@@ -160,6 +160,7 @@ class Client(object):
         ssh = self._get_ssh_connection()
         transport = ssh.get_transport()
         channel = transport.open_session()
+        ssh.agent_handler = paramiko.agent.AgentRequestHandler(channel)
         channel.fileno()  # Register event pipe
         channel.exec_command(cmd)
         channel.shutdown_write()
@@ -168,7 +169,6 @@ class Client(object):
         poll = select.poll()
         poll.register(channel, select.POLLIN)
         start_time = time.time()
-        agent_handler = paramiko.agent.AgentRequestHandler(channel)
 
         while True:
             ready = poll.poll(self.channel_timeout)
