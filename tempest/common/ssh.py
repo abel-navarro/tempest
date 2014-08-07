@@ -110,7 +110,6 @@ class Client(object):
                                 key_filename=self.key_filename,
                                 timeout=self.channel_timeout,
                                 pkey=self.pkey, sock=channel)
-                    ssh.agent
 
                     LOG.info("Tunnel connection %s@%s successfully created through localhost port:4000",
                              self.username, self.host)
@@ -160,6 +159,7 @@ class Client(object):
         ssh = self._get_ssh_connection()
         transport = ssh.get_transport()
         channel = transport.open_session()
+        agent_handler = paramiko.agent.AgentRequestHandler(channel)
         channel.fileno()  # Register event pipe
         channel.exec_command(cmd)
         channel.shutdown_write()
