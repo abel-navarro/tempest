@@ -101,7 +101,7 @@ class Client(object):
                     transport = self.ssh_gw.get_transport()
                     dest_addr = (self.host, 22)
                     local_addr = ('127.0.0.1', 4000)
-                    channel = transport.open_channel("direct-tcpip", dest_addr, local_addr)
+                    channel = transport.open_channel("direct-tcpip", dest_addr, self.request.getpeername())
 
                     LOG.info('Connecting through the tunnel')
                     ssh.connect(hostname='localhost', username=self.username,
