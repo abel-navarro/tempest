@@ -85,12 +85,14 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
     def _ssh_through_gateway(self, origin, destination):
         try:
             ssh_client = self.setup_tunnel(origin[0], origin[1])
-            result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
-            pprint(result)
+            #result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
+            #pprint(result)
             try:
                 result = ssh_client.exec_command("/usr/bin/ssh -A cirros@%s" % destination[0])
                 pprint(result)
             except Exception:
+                result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
+                LOG.info(result)
                 raise
         except Exception as inst:
             LOG.info(inst.args)
