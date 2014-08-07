@@ -105,7 +105,7 @@ class Client(object):
 
                     LOG.info('Connecting through the tunnel')
                     ssh.connect(hostname='localhost', username=self.username,
-                                password=self.password, port=4000,
+                                password=self.password,
                                 look_for_keys=self.look_for_keys,
                                 key_filename=self.key_filename,
                                 timeout=self.channel_timeout,
