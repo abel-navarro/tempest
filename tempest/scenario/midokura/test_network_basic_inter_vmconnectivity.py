@@ -94,7 +94,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
             except Exception:
                 #result = ssh_client.exec_command("ping -c1 -w1 %s" % destination[0])
                 #LOG.info(result)
-                debug.log_net_debug()
+                #debug.log_net_debug()
                 raise
         except Exception as inst:
             LOG.info(inst.args)
