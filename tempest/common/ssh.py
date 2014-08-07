@@ -109,7 +109,7 @@ class Client(object):
                                 look_for_keys=self.look_for_keys,
                                 key_filename=self.key_filename,
                                 timeout=self.channel_timeout,
-                                pkey=self.pkey, sock=channel)
+                                pkey=self.gw_pkey, sock=channel)
 
                     LOG.info("Tunnel connection %s@%s successfully created through localhost port:4000",
                              self.username, self.host)
