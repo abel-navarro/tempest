@@ -187,8 +187,9 @@ class Client(object):
                 err_data += err_chunk,
             if channel.closed and not err_chunk and not out_chunk:
                 break
+            pprint("error %s" % err_data)
+            pprint("out %s" % out_data)
         exit_status = channel.recv_exit_status()
-        pprint(channel.recv)
         if 0 != exit_status:
             raise exceptions.SSHExecCommandFailed(
                 command=cmd, exit_status=exit_status,
