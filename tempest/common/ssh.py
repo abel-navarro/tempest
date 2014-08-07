@@ -167,7 +167,7 @@ class Client(object):
         poll = select.poll()
         poll.register(channel, select.POLLIN)
         start_time = time.time()
-        LOG.info("executting cmd: %s" % cmd)
+        LOG.info("executing cmd: %s" % cmd)
         while True:
             ready = poll.poll(self.channel_timeout)
             if not any(ready):
