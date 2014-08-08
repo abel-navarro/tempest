@@ -296,25 +296,4 @@ class TestScenario(manager.NetworkScenarioTest):
         LOG.debug(result)
         #return access_point_ssh
 
-    def _ssh_client_server_by_gateway(self, gateway, host, gw_pk=None, gw_username=None,
-                                  gw_password=None, pk=None, username=None,
-                                  password=None):
-        tunnel_client = remote_client.RemoteClient(server=host, username=username,
-                                                   password=password, pkey=pk, use_gw=True,
-                                                   gw_username=gw_username, gateway=gateway,
-                                                   gw_password=gw_password, gw_pk=gw_pk)
-        return tunnel_client
-
-    def setup_tunnel(self, remote_ip, private_key):
-        if self.access_point:
-            server, keypair = self.access_point.items()[0]
-            gw_pkey = keypair.private_key
-            fip = self.get_server_ip(server, floating=True)
-
-            ssh_client =self._ssh_client_server_by_gateway(gateway=fip,
-                host=remote_ip, username='cirros', password='cubswin:)', pk=private_key,
-                gw_username='cirros', gw_password='cubswin:)', gw_pk=gw_pkey
-            )
-
-            return ssh_client
 
