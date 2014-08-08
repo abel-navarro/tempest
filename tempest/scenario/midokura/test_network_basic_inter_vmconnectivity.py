@@ -84,15 +84,16 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
 
     def _ssh_through_gateway(self, origin, destination):
         try:
-            ssh_client = self.setup_tunnel(origin[0], origin[1])
-            time.sleep(3000)
-            result = ssh_client.exec_command("ssh cirros@%s" % destination[0])
+            #ssh_client = self.setup_tunnel(origin[0], origin[1])
+            #time.sleep(3000)
+            result = ssh_client.exec_command("ssh -A -t -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no cirros@%s" % destination[0])
             pprint(result)
         except Exception as inst:
             LOG.info(inst.args)
             LOG.info
             raise
 
+"""
     @services('compute', 'network')
     def test_network_basic_inter_vmconnectivity(self):
         ap_details = self.access_point.keys()[0]
@@ -111,6 +112,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                             % server.networks)
         for pair in itertools.permutations(ip_pk):
             self._ping_through_gateway(pair[0],pair[1])
+"""
 
     @services('compute', 'network')
     def test_network_basic_inter_vmssh(self):
