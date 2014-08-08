@@ -82,41 +82,11 @@ class Client(object):
         attempts = 0
         while True:
             try:
-                if self.use_gw:
-
-                    self.ssh_gw = paramiko.SSHClient()
-                    self.ssh_gw.set_missing_host_key_policy(
-                    paramiko.AutoAddPolicy())
-
-
-                    self.ssh_gw.connect(self.gateway, username=self.gw_username,
-                                password=self.gw_password,
-                                look_for_keys=self.look_for_keys,
-                                key_filename=self.gw_key_filename,
-                                timeout=self.channel_timeout, pkey=self.gw_pkey)
-
-                    LOG.info("ssh connection to %s@%s successfuly created",
-                         self.gw_username, self.gateway)
-
-                    transport = self.ssh_gw.get_transport()
-                    dest_addr = (self.host, 22)
-                    local_addr = ('127.0.0.1', 4000)
-                    channel = transport.open_channel("direct-tcpip", dest_addr, local_addr)
-
-                    LOG.info('Connecting through the tunnel')
-                    ssh.connect(hostname='localhost', username=self.username,
-                                password=self.password, port=4000,
-                                look_for_keys=self.look_for_keys,
-                                key_filename=self.key_filename,
-                                timeout=self.channel_timeout,
-                                pkey=self.pkey, sock=channel)
-                else:
-
-                    ssh.connect(self.host, username=self.username,
-                            password=self.password,
-                            look_for_keys=self.look_for_keys,
-                            key_filename=self.key_filename,
-                            timeout=self.channel_timeout, pkey=self.pkey)
+                ssh.connect(self.host, username=self.username,
+                        password=self.password,
+                        look_for_keys=self.look_for_keys,
+                        key_filename=self.key_filename,
+                        timeout=self.channel_timeout, pkey=self.pkey)
 
                 LOG.info("ssh connection to %s@%s successfuly created",
                          self.username, self.host)
@@ -157,6 +127,11 @@ class Client(object):
         transport = ssh.get_transport()
         channel = transport.open_session()
         channel.fileno()  # Register event pipe
+
+        if self.use_gw:
+            cmd = 'ssh -A -t -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no' +\
+                  self.gw_username + '@' + self.gateway + ' ' + cmd
+
         channel.exec_command(cmd)
         channel.shutdown_write()
         out_data = []
