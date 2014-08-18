@@ -99,3 +99,12 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
         for pair in itertools.permutations(ip_pk):
             LOG.info("Checking ssh between %s %s" % (pair[0][0], pair[1][0]))
             # self._ssh_through_gateway(pair[0],pair[1])
+            try:
+                remote_client = self.get_remote_client(pair[0][0],
+                                                       gateway_ip=self.get_gateway_ip,
+                                                       gateway_key=self.get_gateway_key)
+                remote_client.exec_command('ls -la')
+            except Exception:
+                LOG.exception('ssh to server failed')
+                self._log_console_output()
+                raise

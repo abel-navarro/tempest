@@ -61,6 +61,8 @@ class TestScenario(manager.NetworkScenarioTest):
         self.subnets = []
         self.routers = []
         self.floating_ips = {}
+        self.gateway_ip = None
+        self.gateway_key = None
 
     def custom_scenario(self, scenario):
         tenant_id = None
@@ -278,6 +280,7 @@ class TestScenario(manager.NetworkScenarioTest):
         floating_ip = self._create_floating_ip(server, public_network_id, port_id)
         self.floating_ips.setdefault(server, floating_ip)
         self.floating_ip_tuple = Floating_IP_tuple(floating_ip, server)
+        self.gateway_ip = floating_ip
 
     def _fix_access_point(self, access_point):
         """
@@ -291,9 +294,17 @@ class TestScenario(manager.NetworkScenarioTest):
         #should implement a wait for status "ACTIVE" function
         access_point_ssh = self._ssh_to_server(access_point_ip,
                                                private_key=private_key)
+        self.gateway_key = private_key
         #fix for cirros image in order to enable a second eth
         result = access_point_ssh.exec_command("sudo /sbin/udhcpc -i eth1")
         LOG.debug(result)
         #return access_point_ssh
+
+    def get_gateway_ip(self):
+        return self.gateway_ip
+
+    def get_gateway_key(self):
+        return self.gateway_key
+
 
 

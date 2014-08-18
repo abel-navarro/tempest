@@ -82,14 +82,32 @@ class Client(object):
         attempts = 0
         while True:
             try:
-                ssh.connect(self.host, username=self.username,
-                        password=self.password,
-                        look_for_keys=self.look_for_keys,
-                        key_filename=self.key_filename,
-                        timeout=self.channel_timeout, pkey=self.pkey)
+                if self.use_gw:
 
-                LOG.info("ssh connection to %s@%s successfuly created",
-                         self.username, self.host)
+                    self.ssh_gw = paramiko.SSHClient()
+                    self.ssh_gw.set_missing_host_key_policy(
+                    paramiko.AutoAddPolicy())
+
+
+                    self.ssh_gw.connect(self.gateway, username=self.gw_username,
+                                password=self.gw_password,
+                                look_for_keys=self.look_for_keys,
+                                key_filename=self.gw_key_filename,
+                                timeout=self.channel_timeout, pkey=self.gw_pkey)
+
+                    LOG.info("ssh connection to gateway %s@%s successfuly created",
+                         self.gw_username, self.gateway)
+
+                else:
+
+                    ssh.connect(self.host, username=self.username,
+                                password=self.password,
+                                look_for_keys=self.look_for_keys,
+                                key_filename=self.key_filename,
+                                timeout=self.channel_timeout, pkey=self.pkey)
+
+                    LOG.info("ssh connection to %s@%s successfuly created",
+                             self.username, self.host)
 
                 return ssh
             except (socket.error,
@@ -130,7 +148,7 @@ class Client(object):
 
         if self.use_gw:
             cmd = 'ssh -A -t -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no' +\
-                  self.gw_username + '@' + self.gateway + ' ' + cmd
+                  self.username + '@' + self.host + ' ' + cmd
 
         channel.exec_command(cmd)
         channel.shutdown_write()
