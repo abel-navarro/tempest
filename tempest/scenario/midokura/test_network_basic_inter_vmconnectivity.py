@@ -37,14 +37,14 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
     @classmethod
     def setUpClass(cls):
         super(TestNetworkBasicIntraVMConnectivity, cls).setUpClass()
-        cls.check_preconditions()
+        # cls.check_preconditions()
 
     def setUp(self):
         super(TestNetworkBasicIntraVMConnectivity, self).setUp()
-        self.security_group = \
-            self._create_security_group_neutron(tenant_id=self.tenant_id)
-        self._scenario_conf()
-        self.custom_scenario(self.scenario)
+        # self.security_group = \
+        #     self._create_security_group_neutron(tenant_id=self.tenant_id)
+        # self._scenario_conf()
+        # self.custom_scenario(self.scenario)
 
     def _scenario_conf(self):
         serverB = {
