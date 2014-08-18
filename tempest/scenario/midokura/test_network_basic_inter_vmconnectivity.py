@@ -108,3 +108,46 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                 LOG.exception('ssh to server failed')
                 self._log_console_output()
                 raise
+
+    @services('compute', 'network')
+    def test_ssh_hormiga_ardilla(self):
+        ardilla_ip = "83.49.3.137"
+        hormiga_ip = "192.34.62.132"
+        private_key = """-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA2WAjPP9bnYAPMSVeus5MXrEa8Ejzfek5mw9Tm5nBvdBRKnGn
+Qibt19zzqkgU8a5bepaJ12RGNrWHk9CNvuBiKGcm3SMReDJRyvicJcfNAK2a56fY
+sDg/PhovT5eUBH5F8/HUGu4YAIgBc4zsoAn/xVpKzEHl85lTPiWEw2uyQze5N8qp
+R622OitwRX1XDBvaqA5Q3i6tZ0jMGLIbkaXb4Bz5/RBz3Tx6XTZbrurJyxMffZDz
+2D/Qlxbmt/C1F/HhMt0N97sFAC6ibh7/uxOdCDMm73rkohWplTVtsqrBvvhftBX+
+g3kDc+3zLdISA0JSEV0iVJth/V+T3ZPhj2XduQIDAQABAoIBAQCfQgcvNmtZzivT
+Nuzbci+TpK/24Yu7cPbqeuUneBPwzEHbFd+T4M+aul+vHxZxJuwQuWAN9YJXrNHC
+4yYmdWCU91YK6BlxdXRlf5VvPJ4eZBK8rEVeficfibGl34jrbdQ0cLWUcWIWaY6e
+qN3oNss0PP3V/mXJ/kh1nKlTP4EgKsWDzv81e1HqRUhL6kODbgw2IMO9kinMLLQV
+Ali527ZCb9P/azvEII17v86MZFy+XfR5M3Cw2pvPlar6lcL+9+maw1+2GLM3/mg6
+hfZVVw2RauLc0Jeldfrc31otJcniN2dAPkPzrxSKHUTyU5lHmHMkHAiWzcEwlON0
+8E+13mNNAoGBAP9IBci//uQLC7q/WlaFcZmIz0qCM6PQqJ02bwunLJqGp5/N1U3S
+5JyMdOxZyFd454NNpVIgD3YvK/4Oxzptd5cb4GPmpgt9FzlFzkXXqjW1P6hR3EvG
+n6VeZFox6vIzqyM/yqkqndDC3XJ9VTTaF5IbAMc52yNRrvghGXL7LT73AoGBANn8
+zALAXcnJ9FU7pn1FzsMg5NBQ08ikPBs7m5XTMXlyzf/lj+pw7Dz5MzjEaCxjDq5r
+sFrVWfwOQ1j3NrQ065WTx7PMwn9Wq4SZlekdV/QcCbMR+xEr4A0J8Fy1mi39QP9a
+8dyUa+SXpONT0KyrExLFVG9Dr4eyW//6U6rSDqzPAoGAU0WpLV0DxlucDeTRkRui
+fNTV2ZYzRiKQfgf9nS2BLT7zevtnsyUyEab3lQmMgowb6QbxAKMYqBKnJQ6pCnQe
+6JndTnk0fNbnNnWA3eOF0FM5WqypUcaO2SC7V3ilDTCxiKQMdbZDGJAYMHqVytHB
+kpVgYZyL0S+aBbK2XH12uu0CgYAk2qCDNpKkswgkANm9BDhYtQ76STAFE/81e3Zq
+djI/HjHFucIDGORXyqnmRw51sqmgw4QlVzzHaIHqYKFXBjtuJnX06AFaFgUZff3i
+U5uzIapiJAAWfxx6F9wTUIColdCPW4jYih9Tnm+6H0mAZ8vpuIL17LOYdYcoV+Id
+VzYz8QKBgQDIIjNMt3MB1yod4rO1r1WCClsX1/miRnSdZTV3wubI/oIFrpQPgLOV
+ynr92ZufXZ/AYrzoMrh1xnpjfYPnw0Qf5Q9otlIylXk6y+jd3URzIK/iRXKLqxPl
+R2JgNXyB4mdphhb7F8++MaSoezyv4/sRQZ8BpWO/nEP+nEl5Hf0pSg==
+-----END RSA PRIVATE KEY-----"""
+
+        try:
+            remote_client = self.get_remote_client(ardilla_ip,
+                                                   private_key=private_key,
+                                                   gateway_ip=hormiga_ip,
+                                                   gateway_key=private_key)
+            remote_client.exec_command('ls -la')
+        except Exception:
+            LOG.exception('ssh to server failed')
+            self._log_console_output()
+            raise
