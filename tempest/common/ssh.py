@@ -73,8 +73,8 @@ class Client(object):
         _start_time = time.time()
         if self.pkey is not None:
             LOG.info("Creating ssh connection to '%s' as '%s'"
-                     " with public key authentication '%s'",
-                     self.host, self.username, self.pkey)
+                     " with public key authentication",
+                     self.host, self.username)
         else:
             LOG.info("Creating ssh connection to '%s' as '%s'"
                      " with password %s",
