@@ -445,8 +445,8 @@ class OfficialClientTest(tempest.test.BaseTestCase):
             ip = server_or_ip.networks[network_name_for_ssh][0]
         if username is None:
             username = CONF.scenario.ssh_user
-        if private_key is None:
-            private_key = self.keypair.private_key
+        # if private_key is None:
+        #     private_key = self.keypair.private_key
 
         if gateway_ip is not None:
             linux_client = remote_client.RemoteClient(ip,
