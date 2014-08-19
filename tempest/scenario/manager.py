@@ -437,7 +437,7 @@ class OfficialClientTest(tempest.test.BaseTestCase):
         self.addCleanup(self.delete_wrapper, keypair)
         return keypair
 
-    def get_remote_client(self, server_or_ip, username=None, private_key=None, gateway_ip=None, gateway_key=None):
+    def get_remote_client(self, server_or_ip, username=None, private_key=None, gateway_ip=None, gateway_username=None, gateway_key=None):
         if isinstance(server_or_ip, six.string_types):
             ip = server_or_ip
         else:
@@ -453,6 +453,7 @@ class OfficialClientTest(tempest.test.BaseTestCase):
                                                       username,
                                                       pkey=private_key,
                                                       gateway=gateway_ip,
+                                                      gw_username=gateway_username,
                                                       gw_pk=gateway_key,
                                                       use_gw=True)
         else:
