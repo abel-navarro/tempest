@@ -35,7 +35,7 @@ LOG = logging.getLogger(__name__)
 
 class Client(object):
 
-    def __init__(self, host, username, password=None, timeout=300, pkey=None,
+    def __init__(self, host, username, password=None, timeout=30, pkey=None,
                  channel_timeout=10, look_for_keys=False, key_filename=None,
                  use_gw=False, gateway=None, gw_port=None, gw_password=None,
                  gw_username=None, gw_key_filename=None, gw_pkey=None):
