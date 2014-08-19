@@ -93,7 +93,7 @@ class Client(object):
                     self.ssh_gw.connect(self.gateway, username=self.gw_username,
                                 password=self.gw_password,
                                 look_for_keys=self.look_for_keys,
-                                key_filename=self.gw_key_filename,
+                                #key_filename=self.gw_key_filename,
                                 timeout=self.channel_timeout, pkey=self.gw_pkey)
 
                     LOG.info("ssh connection to gateway %s@%s successfuly created",
