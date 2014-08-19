@@ -11,12 +11,14 @@
 #    under the License.
 
 import re
-import six
 import time
+
+import six
 
 from tempest.common import ssh
 from tempest import config
 from tempest import exceptions
+
 
 CONF = config.CONF
 
@@ -26,7 +28,8 @@ class RemoteClient():
     # NOTE(afazekas): It should always get an address instead of server
     def __init__(self, server, username, password=None, pkey=None, gateway=None,
                  gw_pk=None, gw_username=None, gw_password=None, use_gw=False):
-        ssh_timeout = CONF.compute.ssh_timeout
+        #ssh_timeout = CONF.compute.ssh_timeout
+        ssh_timeout = 5
         network = CONF.compute.network_for_ssh
         ip_version = CONF.compute.ip_version_for_ssh
         ssh_channel_timeout = CONF.compute.ssh_channel_timeout
