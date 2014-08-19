@@ -68,12 +68,16 @@ class Client(object):
         LOG.info("creating ssh connection to gateway %s@%s",
                  self.gw_username, self.gateway)
 
-        tunnel = subprocess.Popen(["/usr/bin/ssh",
+        self.tunnel = subprocess.Popen(["/usr/bin/ssh",
                                   "root@hormiga.colluvio.org",
                                   "-L4000:ardilla.colluvio.org:22",
                                   "-N"])
 
         LOG.info("tunnel openned")
+
+    def __del__(self):
+        LOG.info("killing tunnel")
+        self.tunnel.kill()
 
     def _get_ssh_connection(self, sleep=1.5, backoff=1):
         """Returns an ssh connection to the specified host."""
