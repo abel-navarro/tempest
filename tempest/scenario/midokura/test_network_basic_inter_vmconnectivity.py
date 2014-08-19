@@ -126,7 +126,8 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                                                    username=host_username,
                                                    gateway_ip=gateway_ip,
                                                    gateway_username=gateway_username)
-            remote_client.exec_command('ls -la')
+            result = remote_client.exec_command('ls -la')
+            pprint(result)
         except Exception:
             LOG.exception('ssh to server failed')
             self._log_console_output()
