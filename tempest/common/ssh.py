@@ -65,6 +65,16 @@ class Client(object):
         self.gw_pkey = gw_pkey
         self.gw_ssh = None
 
+        LOG.info("creating ssh connection to gateway %s@%s",
+                 self.gw_username, self.gateway)
+
+        tunnel = subprocess.Popen(["/usr/bin/ssh",
+                                  "root@hormiga.colluvio.org",
+                                  "-L4000:ardilla.colluvio.org:22",
+                                  "-N"])
+
+        LOG.info("tunnel openned")
+
     def _get_ssh_connection(self, sleep=1.5, backoff=1):
         """Returns an ssh connection to the specified host."""
         bsleep = sleep
@@ -85,16 +95,6 @@ class Client(object):
         while True:
             try:
                 if self.use_gw:
-
-                    LOG.info("creating ssh connection to gateway %s@%s",
-                         self.gw_username, self.gateway)
-
-                    subprocess.Popen(["/usr/bin/ssh",
-                                      "root@hormiga.colluvio.org",
-                                      "-L4000:ardilla.colluvio.org:22",
-                                      "-N"])
-
-                    LOG.info("tunnel openned")
 
                     ssh.connect("127.0.0.1", port=4000, username=self.username,
                                 password=self.password,
