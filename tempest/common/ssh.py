@@ -85,10 +85,10 @@ class Client(object):
             try:
                 if self.use_gw:
 
+                    LOG.info("creating ssh connection to gateway %s@%s",
+                         self.gw_username, self.gateway)
                     self.ssh_gw = paramiko.SSHClient()
-                    self.ssh_gw.set_missing_host_key_policy(
-                    paramiko.AutoAddPolicy())
-
+                    self.ssh_gw.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
                     self.ssh_gw.connect(self.gateway, username=self.gw_username,
                                 password=self.gw_password,
