@@ -112,13 +112,20 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
     @services('compute', 'network')
     def test_ssh_hormiga_ardilla(self):
         ardilla_ip = "83.49.3.137"
+        ardilla_username = "pi"
         hormiga_ip = "192.34.62.132"
+        hormiga_username = "root"
+
+        host_ip = ardilla_ip
+        host_username = ardilla_username
+        gateway_ip = hormiga_ip
+        gateway_username = hormiga_username
 
         try:
-            remote_client = self.get_remote_client(ardilla_ip,
-                                                   username="pi",
-                                                   gateway_ip=hormiga_ip,
-                                                   gateway_username="root")
+            remote_client = self.get_remote_client(host_ip,
+                                                   username=host_username,
+                                                   gateway_ip=gateway_ip,
+                                                   gateway_username=gateway_username)
             remote_client.exec_command('ls -la')
         except Exception:
             LOG.exception('ssh to server failed')
