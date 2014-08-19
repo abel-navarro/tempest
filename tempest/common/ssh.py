@@ -21,6 +21,7 @@ import time
 import warnings
 
 import six
+import subprocess
 
 from tempest import exceptions
 from tempest.openstack.common import log as logging
@@ -87,19 +88,23 @@ class Client(object):
 
                     LOG.info("creating ssh connection to gateway %s@%s",
                          self.gw_username, self.gateway)
-                    self.ssh_gw = paramiko.SSHClient()
-                    self.ssh_gw.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-                    self.ssh_gw.connect(self.gateway, username=self.gw_username,
-                                password=self.gw_password,
+                    subprocess.Popen(["/usr/bin/ssh",
+                                      "root@hormiga.colluvio.org",
+                                      "-L4000:ardilla.colluvio.org:22",
+                                      "-N"])
+
+                    LOG.info("tunnel openned")
+
+                    ssh.connect("127.0.0.1", port=4000, username=self.username,
+                                password=self.password,
                                 look_for_keys=self.look_for_keys,
-                                #key_filename=self.gw_key_filename,
-                                timeout=self.channel_timeout, pkey=self.gw_pkey)
+                                key_filename=self.key_filename,
+                                timeout=self.channel_timeout, pkey=self.pkey)
 
-                    LOG.info("ssh connection to gateway %s@%s successfuly created",
-                         self.gw_username, self.gateway)
+                    LOG.info("ssh connection through tunnel succeeded")
 
-                    return self.ssh_gw
+                    return ssh
 
                 else:
 
@@ -150,9 +155,9 @@ class Client(object):
         channel = transport.open_session()
         channel.fileno()  # Register event pipe
 
-        if self.use_gw:
-            cmd = 'ssh -A -t -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no ' +\
-                  self.username + '@' + self.host + ' ' + cmd
+        # if self.use_gw:
+        #     cmd = 'ssh -A -t -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no ' +\
+        #           self.username + '@' + self.host + ' ' + cmd
 
         channel.exec_command(cmd)
         channel.shutdown_write()
