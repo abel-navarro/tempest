@@ -126,7 +126,7 @@ class TestNetworkBasicIntraVMConnectivity(scenario.TestScenario):
                                                    username=host_username,
                                                    gateway_ip=gateway_ip,
                                                    gateway_username=gateway_username)
-            result = remote_client.exec_command('ls -la')
+            result = remote_client.exec_command('scp pepe root@hormiga.colluvio.org:')
             LOG.info("result %s" % result)
         except Exception:
             LOG.exception('ssh to server failed')
