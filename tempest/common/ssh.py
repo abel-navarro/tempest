@@ -98,6 +98,8 @@ class Client(object):
                     LOG.info("ssh connection to gateway %s@%s successfuly created",
                          self.gw_username, self.gateway)
 
+                    return self.ssh_gw
+
                 else:
 
                     ssh.connect(self.host, username=self.username,
@@ -109,7 +111,8 @@ class Client(object):
                     LOG.info("ssh connection to %s@%s successfuly created",
                              self.username, self.host)
 
-                return ssh
+                    return ssh
+
             except (socket.error,
                     paramiko.SSHException) as e:
                 if self._is_timed_out(_start_time):
