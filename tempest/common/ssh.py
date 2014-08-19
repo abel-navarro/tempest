@@ -154,6 +154,7 @@ class Client(object):
         :raises: SSHExecCommandFailed if command returns nonzero
                  status. The exception contains command status stderr content.
         """
+        LOG.info("exec_command: %s" % cmd)
         ssh = self._get_ssh_connection()
         transport = ssh.get_transport()
         channel = transport.open_session()
@@ -199,5 +200,6 @@ class Client(object):
 
     def test_connection_auth(self):
         """Raises an exception when we can not connect to server via ssh."""
+        LOG.info("test_connection_auth")
         connection = self._get_ssh_connection()
         connection.close()
