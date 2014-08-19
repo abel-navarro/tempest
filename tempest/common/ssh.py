@@ -151,7 +151,7 @@ class Client(object):
         channel.fileno()  # Register event pipe
 
         if self.use_gw:
-            cmd = 'ssh -A -t -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no' +\
+            cmd = 'ssh -A -t -o UserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no ' +\
                   self.username + '@' + self.host + ' ' + cmd
 
         channel.exec_command(cmd)
