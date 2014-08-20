@@ -15,13 +15,14 @@
 
 
 import cStringIO
+import random
 import select
 import socket
 import time
 import warnings
+import subprocess
 
 import six
-import subprocess
 
 from tempest import exceptions
 from tempest.openstack.common import log as logging
@@ -64,20 +65,49 @@ class Client(object):
                 cStringIO.StringIO(str(gw_pkey)))
         self.gw_pkey = gw_pkey
         self.gw_ssh = None
+        self.tunnel = None
+        self.tunnel_port = None
 
         LOG.info("creating ssh connection to gateway %s@%s",
                  self.gw_username, self.gateway)
 
-        self.tunnel = subprocess.Popen(["/usr/bin/ssh",
-                                  "root@hormiga.colluvio.org",
-                                  "-L4000:ardilla.colluvio.org:22",
-                                  "-N"])
-
-        LOG.info("tunnel openned")
+        if use_gw:
+            local_tcp_port = self._get_local_unused_tcp_port()
+            if local_tcp_port is None:
+                LOG.info("cannot find a free port for the SSH tunnel")
+            else:
+                self.tunnel_port = local_tcp_port
+                tunnel_ssh_str = "%d:%s:%d" % (self.tunnel_port, host, 22)
+                self.tunnel = subprocess.Popen(["/usr/bin/ssh",
+                                                gateway,
+                                                "-l", gw_username,
+                                                "-p", gw_port,
+                                                "-L", tunnel_ssh_str,
+                                                "-N"])
+                LOG.info("tunnel to %s through %s openned" % (host, gateway))
 
     def __del__(self):
         LOG.info("killing tunnel")
-        self.tunnel.kill()
+        if self.tunnel is not None:
+            self.tunnel.kill()
+
+    @staticmethod
+    def _get_local_unused_tcp_port():
+        port = random.randrange(10000, 65535)
+        s = socket.socket()
+        attempts = 0
+        while attempts < 10:
+            try:
+                LOG.info("is port %d free?" % port)
+                s.connect(('127.0.0.1', port))
+                s.shutdown()
+
+                LOG.info("port %d is not free" % port)
+                attempts += 1
+            except:
+                # port is unused
+                LOG.info("port %d is free" % port)
+                return port
 
     def _get_ssh_connection(self, sleep=1.5, backoff=1):
         """Returns an ssh connection to the specified host."""
@@ -100,7 +130,7 @@ class Client(object):
             try:
                 if self.use_gw:
 
-                    ssh.connect("127.0.0.1", port=4000, username=self.username,
+                    ssh.connect("127.0.0.1", port=self.tunnel_port, username=self.username,
                                 password=self.password,
                                 look_for_keys=self.look_for_keys,
                                 key_filename=self.key_filename,
