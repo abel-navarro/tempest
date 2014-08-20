@@ -38,7 +38,7 @@ LOG = logging.getLogger(__name__)
 
 class Client(object):
 
-    def __init__(self, host, username, password=None, timeout=5, pkey=None,
+    def __init__(self, host, username, password=None, timeout=10, pkey=None,
                  channel_timeout=10, look_for_keys=True, key_filename=None,
                  use_gw=False, gateway=None, gw_port=None, gw_password=None,
                  gw_username=None, gw_key_filename=None, gw_pkey=None):
@@ -84,7 +84,7 @@ class Client(object):
                                                 "-p", str(gw_port),
                                                 "-L", tunnel_ssh_str,
                                                 "-N"])
-                LOG.info("tunnel to %s through %s openned" % (host, gateway))
+                LOG.info("tunnel to %s through %s:%d openned" % (host, gateway, self.tunnel_port))
 
     def __del__(self):
         LOG.info("killing tunnel")
@@ -129,6 +129,8 @@ class Client(object):
         while True:
             try:
                 if self.use_gw:
+
+                    LOG.info("opening ssh to 127.0.0.1:%d" % self.tunnel_port)
 
                     ssh.connect("127.0.0.1", port=self.tunnel_port, username=self.username,
                                 password=self.password,
