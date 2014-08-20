@@ -93,6 +93,8 @@ class Client(object):
 
     @staticmethod
     def _get_local_unused_tcp_port():
+        return 6666
+
         port = random.randrange(10000, 65535)
         s = socket.socket()
         attempts = 0
