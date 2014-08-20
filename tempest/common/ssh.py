@@ -85,6 +85,7 @@ class Client(object):
                                                 "-L", tunnel_ssh_str,
                                                 "-N"])
                 LOG.info("tunnel to %s through %s:%d openned" % (host, gateway, self.tunnel_port))
+                time.sleep(60)
 
     def __del__(self):
         LOG.info("killing tunnel")
