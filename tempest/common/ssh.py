@@ -81,7 +81,7 @@ class Client(object):
                 self.tunnel = subprocess.Popen(["/usr/bin/ssh",
                                                 gateway,
                                                 "-l", gw_username,
-                                                "-p", gw_port,
+                                                "-p", str(gw_port),
                                                 "-L", tunnel_ssh_str,
                                                 "-N"])
                 LOG.info("tunnel to %s through %s openned" % (host, gateway))
