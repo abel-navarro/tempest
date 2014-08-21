@@ -71,6 +71,7 @@ class Client(object):
         LOG.info("creating ssh connection to gateway %s@%s",
                  self.gw_username, self.gateway)
 
+        #TODO remove tunnel init from __init__
         if use_gw:
             local_tcp_port = self._get_local_unused_tcp_port()
             if local_tcp_port is None:
@@ -79,7 +80,7 @@ class Client(object):
                 try:
                     self.tunnel_port = local_tcp_port
                     tunnel_ssh_str = "%d:%s:%d" % (self.tunnel_port, host, 22)
-                    LOG.info("gw port: %d" % gw_port)
+                    #TODO handling errors is painfull with Popen, check paramiko approach again
                     self.tunnel = subprocess.Popen(["/usr/bin/ssh",
                                                     gateway,
                                                     "-l", gw_username,
@@ -88,8 +89,6 @@ class Client(object):
                                                     "-N"])
 
                     LOG.info("tunnel to %s through %s:%d opened" % (host, gateway, self.tunnel_port))
-                    #LOG.info("tunnel process pid: %d, return code: %d" % (self.tunnel.pid, self.tunnel.returncode))
-                    time.sleep(60)
 
                 except Exception as e:
                     LOG.info("cannot open tunnel")
@@ -102,7 +101,6 @@ class Client(object):
 
     @staticmethod
     def _get_local_unused_tcp_port():
-        return 6666
 
         port = random.randrange(10000, 65535)
         s = socket.socket()
