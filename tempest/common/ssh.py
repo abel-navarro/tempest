@@ -90,8 +90,9 @@ class Client(object):
                     LOG.info("tunnel process pid: %d, return code: %d" % (self.tunnel.pid, self.tunnel.returncode))
                     time.sleep(60)
 
-                except:
+                except Exception as e:
                     LOG.info("cannot open tunnel")
+                    LOG.info(e)
 
     def __del__(self):
         LOG.info("killing tunnel")
