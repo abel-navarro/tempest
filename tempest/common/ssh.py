@@ -79,22 +79,14 @@ class Client(object):
                 try:
                     self.tunnel_port = local_tcp_port
                     tunnel_ssh_str = "%d:%s:%d" % (self.tunnel_port, host, 22)
-                    # self.tunnel = subprocess.Popen(["/usr/bin/ssh",
-                    #                                 gateway,
-                    #                                 "-l", gw_username,
-                    #                                 "-p", str(gw_port),
-                    #                                 "-L", tunnel_ssh_str,
-                    #                                 "-N"])
-
-                    output = subprocess.check_output(["/usr/bin/ssh",
+                    LOG.info("gw port: %d" % gw_port)
+                    self.tunnel = subprocess.Popen(["/usr/bin/ssh",
                                                     gateway,
                                                     "-l", gw_username,
                                                     "-p", str(gw_port),
                                                     "-L", tunnel_ssh_str,
-                                                    "-N"],
-                                                          stderr=subprocess.STDOUT)
+                                                    "-N"])
 
-                    LOG.info(output)
                     LOG.info("tunnel to %s through %s:%d opened" % (host, gateway, self.tunnel_port))
                     #LOG.info("tunnel process pid: %d, return code: %d" % (self.tunnel.pid, self.tunnel.returncode))
                     time.sleep(60)
