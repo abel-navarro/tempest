@@ -84,7 +84,9 @@ class Client(object):
                                                 "-p", str(gw_port),
                                                 "-L", tunnel_ssh_str,
                                                 "-N"])
-                LOG.info("tunnel to %s through %s:%d openned" % (host, gateway, self.tunnel_port))
+
+                LOG.info("tunnel to %s through %s:%d opened" % (host, gateway, self.tunnel_port))
+                LOG.info("tunnel process pid: %d, return code: %d" % (self.tunnel.pid, self.tunnel.returncode))
                 time.sleep(60)
 
     def __del__(self):
