@@ -40,7 +40,7 @@ class Client(object):
 
     def __init__(self, host, username, password=None, timeout=10, pkey=None,
                  channel_timeout=10, look_for_keys=True, key_filename=None,
-                 use_gw=False, gateway=None, gw_port=None, gw_password=None,
+                 use_gw=False, gateway=None, gw_port=22, gw_password=None,
                  gw_username=None, gw_key_filename=None, gw_pkey=None):
         self.host = host
         self.username = username
